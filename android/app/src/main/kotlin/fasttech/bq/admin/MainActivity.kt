@@ -1,4 +1,4 @@
-package com.example.bq_admin
+package fasttech.bq.admin
 
 import io.flutter.embedding.android.FlutterActivity
 

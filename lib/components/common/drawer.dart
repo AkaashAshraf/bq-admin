@@ -1,21 +1,18 @@
-import 'dart:io';
-
 import 'package:bq_admin/components/common/text_alert.dart';
 import 'package:bq_admin/config/colors.dart';
-import 'package:bq_admin/config/storages.dart';
 import 'package:bq_admin/config/text_sizes.dart';
-import 'package:bq_admin/main.dart';
+import 'package:bq_admin/controllers/auth_controller.dart';
+import 'package:bq_admin/views/notifications/notifications.dart';
+import 'package:bq_admin/views/profile/my_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:restart_app/restart_app.dart';
 
 class MenuDrawer extends StatelessWidget {
-  const MenuDrawer({
+  MenuDrawer({
     Key? key,
   }) : super(key: key);
-
+  final AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -42,7 +39,7 @@ class MenuDrawer extends StatelessWidget {
               SizedBox(
                   width: width * 0.8,
                   child: Text(
-                    "Sana Beauty Saloon",
+                    authController.userInfo.value.nameEn,
                     style: TextStyle(
                         color: primaryColor,
                         fontFamily: "primary",
@@ -58,7 +55,7 @@ class MenuDrawer extends StatelessWidget {
               size: 25,
               color: textInputIconColor,
             ), onPress: () {
-          // Get.to(const Profile());
+          Get.to(const Profile());
         }, title: "Profile".tr),
         // drawerItem(context,
         //     icon: const Icon(
@@ -74,7 +71,7 @@ class MenuDrawer extends StatelessWidget {
               size: 25,
               color: textInputIconColor,
             ), onPress: () {
-          // Get.to(const NotificationsList());
+          Get.to(const NotificationsList());
         }, title: "Notifications".tr),
         if (false)
           ListTile(
@@ -99,7 +96,7 @@ class MenuDrawer extends StatelessWidget {
               title: "logout_alert".tr,
               buttons: DialogButton(
                   onPressed: (() {
-                    // Get.put(AuthController()).logout();
+                    Get.put(AuthController()).logout();
                   }),
                   child: Text(
                     "Yes".tr,
@@ -115,38 +112,40 @@ class MenuDrawer extends StatelessWidget {
           textAlert(context,
               title: "delete_alert".tr,
               buttons: DialogButton(
-                  onPressed: (() {}),
-                  child: Text(
-                    "Yes".tr,
-                    style: const TextStyle(color: Colors.white),
-                  ))).show();
-        }, title: "DeleteAccount".tr),
-        drawerItem(context,
-            icon: const Icon(
-              Icons.language,
-              size: 25,
-              color: textInputIconColor,
-            ), onPress: () {
-          textAlert(context,
-              title: "language_alert".tr,
-              buttons: DialogButton(
                   onPressed: (() {
-                    MyApp().storage.write(localizationPath,
-                        Get.locale.toString() == "en" ? "ar" : "en");
-                    if (Platform.isAndroid) {
-                      Restart.restartApp();
-                    } else {
-                      Phoenix.rebirth(context);
-
-                      Navigator.pop(context);
-                    }
-                    // Phoenix.rebirth(context);
+                    Get.put(AuthController()).logout();
                   }),
                   child: Text(
                     "Yes".tr,
                     style: const TextStyle(color: Colors.white),
                   ))).show();
-        }, title: "ChangeLanguage".tr),
+        }, title: "DeleteAccount".tr),
+        // drawerItem(context,
+        //     icon: const Icon(
+        //       Icons.language,
+        //       size: 25,
+        //       color: textInputIconColor,
+        //     ), onPress: () {
+        //   textAlert(context,
+        //       title: "language_alert".tr,
+        //       buttons: DialogButton(
+        //           onPressed: (() {
+        //             MyApp().storage.write(localizationPath,
+        //                 Get.locale.toString() == "en" ? "ar" : "en");
+        //             if (Platform.isAndroid) {
+        //               Restart.restartApp();
+        //             } else {
+        //               Phoenix.rebirth(context);
+
+        //               Navigator.pop(context);
+        //             }
+        //             // Phoenix.rebirth(context);
+        //           }),
+        //           child: Text(
+        //             "Yes".tr,
+        //             style: const TextStyle(color: Colors.white),
+        //           ))).show();
+        // }, title: "ChangeLanguage".tr),
       ],
     ));
   }

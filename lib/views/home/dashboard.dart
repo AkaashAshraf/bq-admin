@@ -5,7 +5,16 @@ import 'package:bq_admin/components/common/generic_popup.dart';
 import 'package:bq_admin/components/items.dart/dashboard_item.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/constants.dart';
+import 'package:bq_admin/controllers/appointment_controller.dart';
+import 'package:bq_admin/controllers/constant_controller.dart';
+import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/controllers/helper_controller.dart';
+import 'package:bq_admin/controllers/service_controller.dart';
+import 'package:bq_admin/views/feedback/feedbacks.dart';
+import 'package:bq_admin/views/home/appoinments/my_appointments.dart';
+import 'package:bq_admin/views/home/employess/saloon_list_view.dart';
+import 'package:bq_admin/views/home/offers/my_offers.dart';
+import 'package:bq_admin/views/home/services/services_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,6 +27,11 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardView extends State<DashboardView> {
+  EmployeeController employeeController = Get.put(EmployeeController());
+  ServiceController serviceController = Get.put(ServiceController());
+  AppoinmentController appoinmentController = Get.put(AppoinmentController());
+  ConstantController constantController = Get.put(ConstantController());
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -27,7 +41,7 @@ class _DashboardView extends State<DashboardView> {
       // appBar: AppBar(
       //   title: const Text("Dashboard"),
       // ),
-      drawer: const MenuDrawer(),
+      drawer: MenuDrawer(),
       appBar: noAppBar(showCart: false),
       body: SafeArea(
         child: Container(
@@ -70,12 +84,12 @@ class _DashboardView extends State<DashboardView> {
                               dashboardItem(height, width,
                                   imgName: "services.png",
                                   title: "Services".tr, onTap: () {
-                                // Get.to(const SaloonsListView());
+                                Get.to(const ServiceListView());
                               }),
                               dashboardItem(height, width,
                                   imgName: "employees.jpeg",
                                   title: "Employees".tr, onTap: () {
-                                // Get.to(const SPAList());
+                                Get.to(const SaloonListView());
                               }),
                             ],
                           ),
@@ -88,12 +102,12 @@ class _DashboardView extends State<DashboardView> {
                               dashboardItem(height, width,
                                   imgName: "bookings.png",
                                   title: "Bookings".tr, onTap: () {
-                                // Get.to(const GYM());
+                                Get.to(const MyAppointmentsList());
                               }),
                               dashboardItem(height, width,
                                   imgName: "offerss.jpeg",
                                   title: "Offers".tr, onTap: () {
-                                // Get.to(const OffersView());
+                                Get.to(const OffersList());
                               }),
                             ],
                           ),
@@ -108,7 +122,7 @@ class _DashboardView extends State<DashboardView> {
                                   title: "Feed Back".tr, onTap: () {
                                 // Get.put(ShopsController()).fetchShopsList();
 
-                                // Get.to(const ShopsListView());
+                                Get.to(const FeedbacksList());
                               }),
                               dashboardItem(height, width,
                                   imgName: "s_support.jpeg",

@@ -17,7 +17,8 @@ AppBar noAppBar({bool showCart = true}) {
   );
 }
 
-AppBar appBar({required String title, bool showCart = true}) {
+AppBar appBar(
+    {required String title, bool showCart = true, Widget? rightIcon}) {
   return AppBar(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -27,26 +28,10 @@ AppBar appBar({required String title, bool showCart = true}) {
     ),
     elevation: 1,
     actions: [
-      if (showCart)
+      if (rightIcon != null)
         Padding(
             padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-                height: 150.0,
-                width: 30.0,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Stack(
-                    children: const <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                        ),
-                        onPressed: null,
-                      ),
-                    ],
-                  ),
-                )))
+            child: SizedBox(height: 150.0, width: 30.0, child: rightIcon))
     ],
     centerTitle: true,
     title: Text(

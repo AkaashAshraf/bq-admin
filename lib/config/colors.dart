@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color(0xff5D3FD3);
 
 const textInputIconColor = Color(0xffff1493);
+const authTextInputHintColor = Color(0xFFbebebe);
 
 const secandaryColor = Color(0xffff1493);
 final buttonColor = Colors.pinkAccent.shade200;

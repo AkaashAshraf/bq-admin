@@ -7,8 +7,8 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 
-void main() {
-  GetStorage.init();
+void main() async {
+  await GetStorage.init();
 
   runApp(Phoenix(child: MyApp()));
 }
@@ -28,12 +28,12 @@ class MyApp extends StatelessWidget {
         translations: LanguageTranslations(), // your translations
         locale: Locale(local), // translations will be displayed in that locale
         fallbackLocale: Locale(local),
-        title: 'Beauty Saloons',
+        title: 'Beauty Saloons Admin',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: token == "" || token == null
-            ? const DashboardView()
+            ? const SignIn()
             : const DashboardView());
   }
 }
