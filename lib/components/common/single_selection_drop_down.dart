@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/text_sizes.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class SingleSelectionSimpleDropDown extends StatefulWidget {
@@ -30,6 +33,14 @@ class _SingleSelectionSimpleDropDownState
     extends State<SingleSelectionSimpleDropDown> {
   List<int> selected = [];
   bool isObscure_ = true;
+  int selectedIndex = -1;
+  @override
+  void initState() {
+    setState(() {
+      selectedIndex = widget.selected;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,27 +62,79 @@ class _SingleSelectionSimpleDropDownState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  DropdownSearch<DropDown>(
-                    // dropdownButtonProps: const DropdownButtonProps(),
-                    popupProps: const PopupProps.bottomSheet(),
-                    items: widget.items,
-                    selectedItem: widget.items.indexWhere(
-                                (element) => element.value == widget.selected) >
-                            -1
-                        ? widget.items[widget.items.indexWhere(
-                            (element) => element.value == widget.selected)]
-                        : null,
-                    itemAsString: (DropDown u) => u.title,
-                    onChanged: (DropDown? data) => {widget.onChange(data)},
-                    dropdownBuilder: ((context, selectedItem) => Text(
-                          selectedItem?.title ?? "",
-                          maxLines: 1,
-                        )),
-                    dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                          labelText: widget.title, border: InputBorder.none),
-                    ),
+                  Row(
+                    children: [
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          hint: Text(
+                            widget.title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                          items: widget.items
+                              .map((item) => DropdownMenuItem<DropDown>(
+                                    value: item,
+                                    child: Text(
+                                      item.title,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: widget.items.indexWhere((element) =>
+                                      element.value == selectedIndex) >
+                                  -1
+                              ? widget.items[widget.items.indexWhere(
+                                  (element) => element.value == selectedIndex)]
+                              : null,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedIndex = value?.value ?? -1;
+                            });
+                            // print(widget.selected);
+                            // inspect(value);
+                            widget.onChange(value);
+                            // setState(() {
+                            //   selectedValue = value as String;
+                            // });
+                          },
+                          // buttonStyleData: const ButtonStyleData(
+                          //   height: 40,
+                          //   width: 140,
+                          // ),
+                          menuItemStyleData: const MenuItemStyleData(
+                            height: 40,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
+                  // DropdownSearch<DropDown>(
+                  //   // dropdownButtonProps: const DropdownButtonProps(),
+                  //   popupProps: const PopupProps.bottomSheet(),
+                  //   items: widget.items,
+                  //   selectedItem: widget.items.indexWhere(
+                  //               (element) => element.value == widget.selected) >
+                  //           -1
+                  //       ? widget.items[widget.items.indexWhere(
+                  //           (element) => element.value == widget.selected)]
+                  //       : null,
+                  //   itemAsString: (DropDown u) => u.title,
+                  //   onChanged: (DropDown? data) => {widget.onChange(data)},
+                  //   dropdownBuilder: ((context, selectedItem) => Text(
+                  //         selectedItem?.title ?? "",
+                  //         maxLines: 1,
+                  //       )),
+                  //   dropdownDecoratorProps: DropDownDecoratorProps(
+                  //     dropdownSearchDecoration: InputDecoration(
+                  //         labelText: widget.title, border: InputBorder.none),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),

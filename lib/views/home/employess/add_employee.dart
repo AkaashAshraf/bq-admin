@@ -33,20 +33,15 @@ class _AddEmployeeState extends State<AddEmployee> {
   // int city = 0;
   String nameEn = "";
   String nameAr = "";
-  String contact = "";
+  String contact = "N/A";
   String experience = "";
 
   int country = 0;
-  int religion = 0;
+  int religion = 100;
 
   String notifyingStock = "";
   bool checkValidation() {
-    if (nameEn.isEmpty ||
-        nameAr.isEmpty ||
-        contact.isEmpty ||
-        contact.length < 8 ||
-        country == 0 ||
-        religion == 0) {
+    if (nameEn.isEmpty || nameAr.isEmpty || country == 0) {
       ToastMessages.showError("Some data is missing");
 
       return false;
@@ -152,25 +147,25 @@ class _AddEmployeeState extends State<AddEmployee> {
                   // ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              SimpleInputField(
-                title: "Contact",
-                hint: "writeHere".tr,
-                keyBoardType: TextInputType.number,
-                initialValue: contact,
-                validator: isValidate && contact.isEmpty
-                    ? "required".tr
-                    : isValidate && contact.length < 8
-                        ? "invalid contact"
-                        : "",
-                onTextChange: (val) {
-                  setState(() {
-                    contact = val;
-                  });
-                },
-              ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SimpleInputField(
+              //   title: "Contact",
+              //   hint: "writeHere".tr,
+              //   keyBoardType: TextInputType.number,
+              //   initialValue: contact,
+              //   validator: isValidate && contact.isEmpty
+              //       ? "required".tr
+              //       : isValidate && contact.length < 8
+              //           ? "invalid contact"
+              //           : "",
+              //   onTextChange: (val) {
+              //     setState(() {
+              //       contact = val;
+              //     });
+              //   },
+              // ),
               // const SizedBox(
               //   height: 10,
               // ),
@@ -194,6 +189,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   title: "Country",
                   validator: isValidate && country == 0 ? "required" : "",
                   onChange: (DropDown val) {
+                    inspect(val);
                     setState(() {
                       country = val.value;
                     });
@@ -203,22 +199,22 @@ class _AddEmployeeState extends State<AddEmployee> {
                       .map((element) => DropDown(
                           title: element.nameEn ?? "", value: element.id ?? 0))
                       .toList()),
-              const SizedBox(
-                height: 10,
-              ),
-              SingleSelectionSimpleDropDown(
-                  title: "Religion",
-                  validator: isValidate && religion == 0 ? "required" : "",
-                  onChange: (DropDown val) {
-                    setState(() {
-                      religion = val.value;
-                    });
-                  },
-                  selected: 0,
-                  items: constantController.religions
-                      .map((element) => DropDown(
-                          title: element.nameEn ?? "", value: element.id ?? 0))
-                      .toList()),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SingleSelectionSimpleDropDown(
+              //     title: "Religion",
+              //     validator: isValidate && religion == 0 ? "required" : "",
+              //     onChange: (DropDown val) {
+              //       setState(() {
+              //         religion = val.value;
+              //       });
+              //     },
+              //     selected: 0,
+              //     items: constantController.religions
+              //         .map((element) => DropDown(
+              //             title: element.nameEn ?? "", value: element.id ?? 0))
+              //         .toList()),
               const SizedBox(
                 height: 10,
               ),
