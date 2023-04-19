@@ -90,22 +90,22 @@ class _Profile extends State<Profile> {
                               nameAr = val;
                             });
                           }),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      textInputCustom(
-                          label: "Email".tr,
-                          initialValue: email,
-                          preIcon: const Icon(
-                            Icons.email,
-                            size: 20,
-                            color: textInputIconColor,
-                          ),
-                          onTextChange: (val) {
-                            setState(() {
-                              email = val;
-                            });
-                          }),
+                      // const SizedBox(
+                      //   height: 30,
+                      // ),
+                      // textInputCustom(
+                      //     label: "Email".tr,
+                      //     initialValue: email,
+                      //     preIcon: const Icon(
+                      //       Icons.email,
+                      //       size: 20,
+                      //       color: textInputIconColor,
+                      //     ),
+                      //     onTextChange: (val) {
+                      //       setState(() {
+                      //         email = val;
+                      //       });
+                      //     }),
                       const SizedBox(
                         height: 30,
                       ),

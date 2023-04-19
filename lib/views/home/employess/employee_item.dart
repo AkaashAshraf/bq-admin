@@ -1,12 +1,17 @@
+import 'package:bq_admin/components/common/loading_indicator%20copy.dart';
+import 'package:bq_admin/components/common/simple_button.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/text_sizes.dart';
+import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/models/simple/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Widget saloonItem(double cardHeight, BuildContext context,
-    {required Employee item, required dynamic onPress}) {
+    {required Employee item,
+    required dynamic onPress,
+    required EmployeeController controller}) {
   return GestureDetector(
     onTap: () {
       onPress(item);
@@ -56,7 +61,7 @@ Widget saloonItem(double cardHeight, BuildContext context,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          "City",
+                          "Country",
                           style: TextStyle(
                             color: secondaryTextColor,
                             fontFamily: "primary",
@@ -64,6 +69,31 @@ Widget saloonItem(double cardHeight, BuildContext context,
                         ),
                         Text(
                           item.countryEn,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontFamily: "primary",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    width: screenWidth(context) * 0.65,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Experience",
+                          style: TextStyle(
+                            color: secondaryTextColor,
+                            fontFamily: "primary",
+                          ),
+                        ),
+                        Text(
+                          "${item.exp} years",
                           style: const TextStyle(
                             color: Colors.black,
                             fontFamily: "primary",
@@ -89,11 +119,17 @@ Widget saloonItem(double cardHeight, BuildContext context,
                         ),
                         SizedBox(
                           child: Text(
-                            item.isBlocked == 1 ? "Blocked" : "Active",
+                            item.isBlocked == 1
+                                ? "Blocked"
+                                : item.isActive == 1
+                                    ? "Active"
+                                    : "Deactive",
                             style: TextStyle(
                               color: item.isBlocked == 1
                                   ? Colors.red
-                                  : Colors.green,
+                                  : item.isActive == 1
+                                      ? Colors.green
+                                      : Colors.red,
                               fontFamily: "primary",
                             ),
                           ),
@@ -101,6 +137,31 @@ Widget saloonItem(double cardHeight, BuildContext context,
                       ],
                     ),
                   ),
+                  GetX<EmployeeController>(builder: (controller) {
+                    return SizedBox(
+                      width: screenWidth(context) * 0.6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          controller.updateStatusLoading.value &&
+                                  controller.updateStatusID.value == item.empId
+                              ? const BQLoaing(height: 25, width: 25)
+                              : SimpleButton(
+                                  backgroundColor: item.isActive == 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                  title: item.isActive == 0
+                                      ? "Active Now"
+                                      : "Deativate ",
+                                  onPress: () {
+                                    controller.blockUnblockEmployee(
+                                        status: item.isActive == 0 ? 1 : 0,
+                                        employeeID: item.empId);
+                                  }),
+                        ],
+                      ),
+                    );
+                  })
                 ],
               ),
             ),

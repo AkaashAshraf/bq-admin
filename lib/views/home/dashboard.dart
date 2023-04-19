@@ -12,7 +12,7 @@ import 'package:bq_admin/controllers/helper_controller.dart';
 import 'package:bq_admin/controllers/service_controller.dart';
 import 'package:bq_admin/views/feedback/feedbacks.dart';
 import 'package:bq_admin/views/home/appoinments/my_appointments.dart';
-import 'package:bq_admin/views/home/employess/saloon_list_view.dart';
+import 'package:bq_admin/views/home/employess/employees_list_view.dart';
 import 'package:bq_admin/views/home/offers/my_offers.dart';
 import 'package:bq_admin/views/home/services/services_list_view.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +89,7 @@ class _DashboardView extends State<DashboardView> {
                               dashboardItem(height, width,
                                   imgName: "employees.jpeg",
                                   title: "Employees".tr, onTap: () {
-                                Get.to(const SaloonListView());
+                                Get.to(const EmployeesListView());
                               }),
                             ],
                           ),

@@ -96,4 +96,44 @@ class ServiceController extends GetxController {
       loading(false);
     }
   }
+
+  updateService({
+    required int service,
+    required int id,
+    required String descriptionEn,
+    required String price,
+    required String descriptionAr,
+    required String time,
+    required XFile? image,
+  }) async {
+    try {
+      loading(true);
+
+      var request =
+          http.MultipartRequest('POST', Uri.parse(baseUrl + serviceUpdateUrl));
+
+      request.fields['service'] = service.toString();
+      request.fields['id'] = id.toString();
+
+      request.fields['charges'] = price;
+      request.fields['time'] = time;
+
+      request.fields['description_en'] = descriptionEn;
+      request.fields['description_ar'] = descriptionAr;
+      if (image != null) {
+        http.MultipartFile multipartFile =
+            await http.MultipartFile.fromPath('image', image.path);
+        request.files.add(multipartFile);
+      }
+
+      var res = await multirequestPost(request);
+      var resData = await res.stream.toBytes();
+      var fRes = String.fromCharCodes(resData);
+      return fRes;
+    } catch (err) {
+      print(err.toString());
+    } finally {
+      loading(false);
+    }
+  }
 }

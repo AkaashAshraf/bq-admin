@@ -9,11 +9,12 @@ const String changePassword = "";
 // emplyees
 const String employeesListUrl = "/admin/employees/list";
 const String employeesAddUrl = "/admin/employee/add";
-const String employeesChangeStatusUrl = "/admin/employees/add";
+const String employeesChangeStatusUrl = "/admin/employees/active_deactive";
 
 // services
 const String serviceListUrl = "/admin/services/list";
 const String serviceAddUrl = "/admin/services/add";
+const String serviceUpdateUrl = "/admin/services/update";
 const String serviceChangeStatusUrl = "/admin/services/active_deactive";
 // ///apppoinments
 const String appointmentListUrl = "/admin/appointments/list";

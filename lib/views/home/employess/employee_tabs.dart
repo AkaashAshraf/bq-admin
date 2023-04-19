@@ -2,18 +2,18 @@ import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/text_sizes.dart';
 import 'package:bq_admin/views/home/employess/add_employee.dart';
-import 'package:bq_admin/views/home/employess/saloon_list_view.dart';
+import 'package:bq_admin/views/home/employess/employees_list_view.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SaloonsTabs extends StatefulWidget {
-  const SaloonsTabs({Key? key}) : super(key: key);
+class EmployeeTabs extends StatefulWidget {
+  const EmployeeTabs({Key? key}) : super(key: key);
   @override
-  State<SaloonsTabs> createState() => _SaloonsTabs();
+  State<EmployeeTabs> createState() => _EmployeeTabs();
 }
 
-class _SaloonsTabs extends State<SaloonsTabs> {
+class _EmployeeTabs extends State<EmployeeTabs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,9 +77,9 @@ class _SaloonsTabs extends State<SaloonsTabs> {
               ),
               const Expanded(
                 child: TabBarView(children: [
-                  SaloonListView(),
-                  SaloonListView(),
-                  SaloonListView(),
+                  EmployeesListView(),
+                  EmployeesListView(),
+                  EmployeesListView(),
                 ]),
               ),
             ],

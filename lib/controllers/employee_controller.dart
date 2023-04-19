@@ -1,17 +1,20 @@
 import 'dart:developer';
 
+import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/sub_urls.dart';
 import 'package:bq_admin/http/http.dart';
 import 'package:bq_admin/models/response/employees.dart';
+import 'package:bq_admin/models/response/general_response.dart';
 import 'package:bq_admin/models/simple/employee.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class EmployeeController extends GetxController {
   RxList<Employee> employees = <Employee>[].obs;
-
+  RxBool updateStatusLoading = false.obs;
+  RxInt updateStatusID = 0.obs;
   RxBool loading = false.obs;
 
   @override
@@ -37,20 +40,31 @@ class EmployeeController extends GetxController {
     }
   }
 
-  blockUnblockEmployee({required int status, required int saloonID}) async {
+  blockUnblockEmployee({required int status, required int employeeID}) async {
     try {
+      updateStatusLoading(true);
+      updateStatusID(employeeID);
       loading(true);
       final result = await post(employeesChangeStatusUrl,
-          {"status": status.toString(), "saloon_id": saloonID.toString()});
-      inspect(result);
+          {"status": status.toString(), "emp_id": employeeID.toString()});
+      // inspect(result);
       if (result != null) {
-        fetchEmployees();
-
+        var res = generalResponseFromJson(result?.body);
+        if (res.status == 1) {
+          ToastMessages.showSuccess(
+              Get.locale.toString() == "en" ? res.message : res.messageAr);
+          await fetchEmployees();
+        } else {
+          ToastMessages.showError(
+              Get.locale.toString() == "en" ? res.message : res.messageAr);
+        }
         return true;
       } else {
         return false;
       }
     } finally {
+      updateStatusLoading(false);
+      updateStatusID(0);
       loading(false);
     }
   }

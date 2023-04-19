@@ -4,17 +4,17 @@ import 'package:bq_admin/components/common/no_data_widget.dart';
 import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/models/simple/employee.dart';
 import 'package:bq_admin/views/home/employess/add_employee.dart';
-import 'package:bq_admin/views/home/employess/saloon_item.dart';
+import 'package:bq_admin/views/home/employess/employee_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SaloonListView extends StatefulWidget {
-  const SaloonListView({Key? key}) : super(key: key);
+class EmployeesListView extends StatefulWidget {
+  const EmployeesListView({Key? key}) : super(key: key);
   @override
-  State<SaloonListView> createState() => _SaloonListView();
+  State<EmployeesListView> createState() => _EmployeesListView();
 }
 
-class _SaloonListView extends State<SaloonListView> {
+class _EmployeesListView extends State<EmployeesListView> {
   EmployeeController employeesController = Get.find<EmployeeController>();
   @override
   void initState() {
@@ -70,6 +70,7 @@ class _SaloonListView extends State<SaloonListView> {
                                 100,
                                 context,
                                 item: getListIndex(controller, index),
+                                controller: controller,
                                 onPress: (item) {},
                               ),
                             ));

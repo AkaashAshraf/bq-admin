@@ -5,6 +5,7 @@ import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/text_sizes.dart';
 import 'package:bq_admin/controllers/service_controller.dart';
 import 'package:bq_admin/models/simple/service.dart';
+import 'package:bq_admin/views/home/services/update_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -142,6 +143,18 @@ Widget serviceItem(double cardHeight, BuildContext context,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          SimpleButton(
+                              backgroundColor: Colors.green,
+                              title: "Update",
+                              onPress: () {
+                                Get.to(UpdateService(service: item));
+                                // controller.blockUnblockSerivce(
+                                //     status: item.isActive == 0 ? 1 : 0,
+                                //     serviceId: item.id);
+                              }),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           controller.updateStatusLoading.value &&
                                   controller.updateStatusID.value == item.id
                               ? const BQLoaing(height: 25, width: 25)
