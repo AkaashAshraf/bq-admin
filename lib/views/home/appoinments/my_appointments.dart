@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/config/colors.dart';
+import 'package:bq_admin/config/text_sizes.dart';
+import 'package:bq_admin/controllers/appointment_controller.dart';
 import 'package:bq_admin/views/home/appoinments/appointment_tab.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:get/get.dart';
@@ -40,6 +45,67 @@ class _MyAppointmentsList extends State<MyAppointmentsList> {
             children: <Widget>[
               const SizedBox(
                 height: 12,
+              ),
+              GetX<AppoinmentController>(builder: (controller) {
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: screenWidth(context) * 0.45,
+                      child: DateTimePicker(
+                        initialValue: controller.from.value,
+                        type: DateTimePickerType.date,
+                        icon: const Icon(Icons.calendar_month),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        dateLabelText: 'From'.tr,
+                        onChanged: (val) => setState(() {
+                          // dateTime = val;
+                          controller.from(val);
+                          controller.forceLoading(true);
+
+                          controller.fetchAppoinments();
+                          // inspect({controller.from.value: controller.to.value});
+                        }),
+                        validator: (val) {
+                          return null;
+                        },
+                        onSaved: (val) => setState(() {
+                          // dateTime = val ?? "";
+                        }),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: screenWidth(context) * 0.45,
+                      child: DateTimePicker(
+                        initialValue: controller.to.value,
+                        type: DateTimePickerType.date,
+                        icon: const Icon(Icons.calendar_month),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        dateLabelText: 'To'.tr,
+                        onChanged: (val) => setState(() {
+                          controller.to(val);
+                          // dateTime = val;
+                          controller.forceLoading(true);
+
+                          controller.fetchAppoinments();
+                        }),
+                        validator: (val) {
+                          return null;
+                        },
+                        onSaved: (val) => setState(() {
+                          // dateTime = val ?? "";
+                        }),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+              const SizedBox(
+                height: 10,
               ),
               ButtonsTabBar(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 15),

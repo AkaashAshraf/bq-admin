@@ -19,6 +19,7 @@ class Appointment {
     this.createdAt = '',
     this.updatedAt = '',
     this.timeElapsed = 0,
+    this.byAdmin = 0,
     required this.requestedServices,
     required this.employee,
     required this.saloon,
@@ -28,6 +29,8 @@ class Appointment {
   int saloonId;
   int customerId;
   int employeeId;
+  int byAdmin;
+
   int status;
   double totalAmount;
   int totalServices;
@@ -47,6 +50,7 @@ class Appointment {
   factory Appointment.fromJson(Map<String, dynamic> json) => Appointment(
         id: json["id"] ?? 0,
         saloonId: json["saloon_id"] ?? 0,
+        byAdmin: json["by_admin"] ?? 0,
         customerId: json["customer_id"] ?? 0,
         employeeId: json["employee_id"] ?? 0,
         status: json["status"] ?? 0,
@@ -71,6 +75,7 @@ class Appointment {
   Map<String, dynamic> toJson() => {
         "id": id,
         "saloon_id": saloonId,
+        "by_admin": byAdmin,
         "customer_id": customerId,
         "employee_id": employeeId,
         "status": status,

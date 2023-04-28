@@ -8,7 +8,11 @@ const String changePassword = "";
 
 // emplyees
 const String employeesListUrl = "/admin/employees/list";
+const String employeesDetaislUrl = "/admin/employees/extra-details";
+
 const String employeesAddUrl = "/admin/employee/add";
+const String employeesUpdateUrl = "/admin/employee/update";
+
 const String employeesChangeStatusUrl = "/admin/employees/active_deactive";
 
 // services

@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/constants.dart';
+import 'package:bq_admin/config/storages.dart';
 import 'package:bq_admin/config/sub_urls.dart';
 import 'package:bq_admin/http/http.dart';
+import 'package:bq_admin/main.dart';
 import 'package:bq_admin/models/response/employees.dart';
 import 'package:bq_admin/models/response/general_response.dart';
 import 'package:bq_admin/models/simple/employee.dart';
@@ -27,14 +29,28 @@ class EmployeeController extends GetxController {
   fetchEmployees() async {
     try {
       loading(true);
+      var userID = await MyApp().storage.read(userIDPath) ?? "";
+
       final result = await post(employeesListUrl, {
-        'saloon_id': "1",
+        'saloon_id': userID.toString(),
         "type": "all",
       });
       if (result != null) {
         final data = employeesFromJson(result?.body);
         employees(data.data);
       }
+    } finally {
+      loading(false);
+    }
+  }
+
+  fetchEmployeeDetails(String empID) async {
+    try {
+      loading(true);
+      final result = await post(employeesDetaislUrl, {
+        'emp_id': empID,
+      });
+      return result;
     } finally {
       loading(false);
     }
@@ -73,8 +89,10 @@ class EmployeeController extends GetxController {
     required String nameEn,
     required String nameAr,
     required String contact,
+    required String holiday1,
+    required String holiday2,
     required String experience,
-    // required int city,
+    required int empID,
     required int country,
     required int religion,
     required XFile? image,
@@ -82,12 +100,18 @@ class EmployeeController extends GetxController {
     try {
       loading(true);
 
-      var request =
-          http.MultipartRequest('POST', Uri.parse(baseUrl + employeesAddUrl));
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              baseUrl + (empID > 0 ? employeesUpdateUrl : employeesAddUrl)));
       request.fields['name_en'] = nameEn;
+      request.fields['emp_id'] = empID.toString();
 
       request.fields['name_ar'] = nameAr;
       request.fields['contact'] = contact;
+      request.fields['holiday_1'] = holiday1;
+      request.fields['holiday_2'] = holiday2;
+
       request.fields['country'] = country.toString();
 
       request.fields['relegion'] = religion.toString();

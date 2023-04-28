@@ -2,10 +2,12 @@ import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/components/common/buttons.dart';
 import 'package:bq_admin/components/common/drawer.dart';
 import 'package:bq_admin/components/common/generic_popup.dart';
+import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/components/items.dart/dashboard_item.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/controllers/appointment_controller.dart';
+import 'package:bq_admin/controllers/cart_controller.dart';
 import 'package:bq_admin/controllers/constant_controller.dart';
 import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/controllers/helper_controller.dart';
@@ -31,7 +33,7 @@ class _DashboardView extends State<DashboardView> {
   ServiceController serviceController = Get.put(ServiceController());
   AppoinmentController appoinmentController = Get.put(AppoinmentController());
   ConstantController constantController = Get.put(ConstantController());
-
+  CartController cartController = Get.put(CartController());
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -107,7 +109,9 @@ class _DashboardView extends State<DashboardView> {
                               dashboardItem(height, width,
                                   imgName: "offerss.jpeg",
                                   title: "Offers".tr, onTap: () {
-                                Get.to(const OffersList());
+                                ToastMessages.showWarning(
+                                    "This Feature Will Be Available Soon".tr);
+                                // Get.to(const OffersList());
                               }),
                             ],
                           ),

@@ -9,16 +9,18 @@ import 'package:bq_admin/components/common/simple_text_input.dart';
 import 'package:bq_admin/components/common/single_selection_drop_down.dart';
 // import 'package:bq_admin/components/common/single_selection_drop_down.dart';
 import 'package:bq_admin/components/common/toasts.dart';
+import 'package:bq_admin/config/text_sizes.dart';
 import 'package:bq_admin/controllers/constant_controller.dart';
 import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/controllers/helper_controller.dart';
+import 'package:bq_admin/models/simple/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddEmployee extends StatefulWidget {
-  const AddEmployee({super.key});
-
+  const AddEmployee({super.key, required this.employee});
+  final Employee employee;
   @override
   State<AddEmployee> createState() => _AddEmployeeState();
 }
@@ -27,7 +29,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   HelperController helperController = Get.put(HelperController());
 
   var isValidate = false;
-  int productId = 0;
+  int employeeId = 0;
   String imageSelectionType = "gallery".tr;
   XFile? image1;
   // int city = 0;
@@ -37,6 +39,9 @@ class _AddEmployeeState extends State<AddEmployee> {
   String experience = "";
 
   int country = 0;
+  int holiday1 = 0;
+  int holiday2 = 0;
+
   int religion = 100;
 
   String notifyingStock = "";
@@ -46,7 +51,7 @@ class _AddEmployeeState extends State<AddEmployee> {
 
       return false;
     }
-    if (productId == 0 && image1 == null) {
+    if (employeeId == 0 && image1 == null) {
       ToastMessages.showError("Some data is missing");
 
       return false;
@@ -56,6 +61,16 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   @override
   void initState() {
+    if (widget.employee.empId > 0) {
+      setState(() {
+        employeeId = widget.employee.empId;
+        nameEn = widget.employee.nameEn;
+        nameAr = widget.employee.nameAr;
+        country = widget.employee.country;
+        holiday1 = widget.employee.holiday1;
+        holiday2 = widget.employee.holiday2;
+      });
+    }
     super.initState();
   }
 
@@ -66,7 +81,8 @@ class _AddEmployeeState extends State<AddEmployee> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: appBar(title: "Add Employee"),
+      appBar:
+          appBar(title: employeeId > 0 ? "Update Employee" : "Add Employee"),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: GetX<EmployeeController>(builder: (controller) {
@@ -182,19 +198,101 @@ class _AddEmployeeState extends State<AddEmployee> {
               //         .map((element) => DropDown(
               //             title: element.nameEn ?? "", value: element.id ?? 0))
               //         .toList()),
+
+              Row(
+                children: [
+                  SizedBox(
+                    width: screenWidth(context) * 0.49,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Holiday 1",
+                                style: TextStyle(
+                                    fontFamily: "primary",
+                                    fontSize: screenWidth(context) * 0.04,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SingleSelectionSimpleDropDown(
+                            title: "Holiday 1",
+                            onChange: (DropDown val) {
+                              // inspect(val);
+                              setState(() {
+                                holiday1 = val.value;
+                              });
+                            },
+                            selected: holiday1,
+                            items: constantController.days),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Holiday 2",
+                                style: TextStyle(
+                                    fontFamily: "primary",
+                                    fontSize: screenWidth(context) * 0.04,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SingleSelectionSimpleDropDown(
+                            title: "Holiday 2",
+                            onChange: (DropDown val) {
+                              // inspect(val);
+                              setState(() {
+                                holiday2 = val.value;
+                              });
+                            },
+                            selected: holiday2,
+                            items: constantController.days),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
               const SizedBox(
                 height: 10,
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Country",
+                      style: TextStyle(
+                          fontFamily: "primary",
+                          fontSize: screenWidth(context) * 0.04,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+
               SingleSelectionSimpleDropDown(
                   title: "Country",
                   validator: isValidate && country == 0 ? "required" : "",
                   onChange: (DropDown val) {
-                    inspect(val);
+                    // inspect(val);
                     setState(() {
                       country = val.value;
                     });
                   },
-                  selected: 0,
+                  selected: country,
                   items: constantController.countries
                       .map((element) => DropDown(
                           title: element.nameEn ?? "", value: element.id ?? 0))
@@ -221,7 +319,7 @@ class _AddEmployeeState extends State<AddEmployee> {
               customImagePicker(
                 hint: '',
                 width: width,
-                validator: isValidate && image1 == null && productId == 0
+                validator: isValidate && image1 == null && employeeId == 0
                     ? "imageIsRequired".tr
                     : "",
                 onTap: () async {
@@ -261,8 +359,10 @@ class _AddEmployeeState extends State<AddEmployee> {
                   width: width * 0.9,
                   height: height * 0.06,
                   child: SimpleButton(
-                    title: "Create",
+                    title: employeeId > 0 ? "Update" : "Create",
                     onPress: () async {
+                      // print(DateTime.now().weekday);
+                      // return;
                       setState(() {
                         isValidate = true;
                       });
@@ -280,7 +380,10 @@ class _AddEmployeeState extends State<AddEmployee> {
                           await Get.find<EmployeeController>().addEmployee(
                         nameEn: nameEn,
                         nameAr: nameAr,
+                        holiday1: holiday1.toString(),
+                        holiday2: holiday2.toString(),
                         contact: contact,
+                        empID: employeeId,
                         experience: experience,
                         country: country,
                         // city: city,
@@ -289,9 +392,13 @@ class _AddEmployeeState extends State<AddEmployee> {
                       );
                       // inspect(res);
                       if (res != null) {
-                        ToastMessages.showSuccess(
-                            "Employee has been added successfully");
+                        ToastMessages.showSuccess(employeeId > 0
+                            ? "Employee has been updated successfully"
+                            : "Employee has been added successfully");
                         Get.back();
+                        if (employeeId > 0) {
+                          Get.back();
+                        }
                         controller.fetchEmployees();
                       }
                     },

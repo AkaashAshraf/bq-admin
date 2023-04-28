@@ -30,6 +30,8 @@ class _AddServiceState extends State<AddService> {
   String imageSelectionType = "gallery".tr;
   XFile? image1;
   String price = "";
+  String disountedPrice = "";
+
   String time = "";
   int service = 0;
 
@@ -38,6 +40,7 @@ class _AddServiceState extends State<AddService> {
 
   bool checkValidation() {
     if (price.isEmpty ||
+        price.isEmpty ||
         time.isEmpty ||
         service == 0 ||
         descriptionEn.isEmpty ||
@@ -113,19 +116,35 @@ class _AddServiceState extends State<AddService> {
                   Expanded(
                     child: SimpleInputField(
                       keyBoardType: TextInputType.number,
-                      title: "Estimated Time",
+                      title: "Discounted Price",
                       hint: "writeHere".tr,
-                      initialValue: time,
-                      validator:
-                          isValidate && time.isEmpty ? "required".tr : "",
+                      initialValue: disountedPrice,
+                      validator: isValidate && disountedPrice.isEmpty
+                          ? "required".tr
+                          : "",
                       onTextChange: (val) {
                         setState(() {
-                          time = val;
+                          disountedPrice = val;
                         });
                       },
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SimpleInputField(
+                keyBoardType: TextInputType.number,
+                title: "Estimated Time",
+                hint: "writeHere".tr,
+                initialValue: time,
+                validator: isValidate && time.isEmpty ? "required".tr : "",
+                onTextChange: (val) {
+                  setState(() {
+                    time = val;
+                  });
+                },
               ),
               const SizedBox(
                 height: 10,
@@ -222,12 +241,13 @@ class _AddServiceState extends State<AddService> {
                           service: service,
                           descriptionEn: descriptionEn,
                           price: price,
+                          disountedPrice: disountedPrice,
                           descriptionAr: descriptionAr,
                           time: time,
                           image: image1);
                       if (res != null) {
                         ToastMessages.showSuccess(
-                            "Employee has been added successfully");
+                            "Service has been added successfully");
                         Get.back();
                         controller.fetchServices();
                       } else {

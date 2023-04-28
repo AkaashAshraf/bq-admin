@@ -5,6 +5,7 @@ import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/text_sizes.dart';
 import 'package:bq_admin/controllers/employee_controller.dart';
 import 'package:bq_admin/models/simple/employee.dart';
+import 'package:bq_admin/views/home/employess/employee_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -143,6 +144,18 @@ Widget saloonItem(double cardHeight, BuildContext context,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          SimpleButton(
+                              backgroundColor: Colors.green,
+                              title: "View",
+                              onPress: () {
+                                Get.to(EmployeeDetailsView(employee: item));
+                                // controller.blockUnblockEmployee(
+                                //     status: item.isActive == 0 ? 1 : 0,
+                                //     employeeID: item.empId);
+                              }),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           controller.updateStatusLoading.value &&
                                   controller.updateStatusID.value == item.empId
                               ? const BQLoaing(height: 25, width: 25)

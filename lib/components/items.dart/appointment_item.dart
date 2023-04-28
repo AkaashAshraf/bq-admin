@@ -76,29 +76,32 @@ class AppointmentItem extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
+                textRow(
+                    title1: "Booking By".tr,
+                    title2: "Vat Excluded".tr,
+                    textColor1: Colors.grey,
+                    textColor2: Colors.grey),
+                // Row(
+                //   children: [
+                //     SizedBox(
+                //       width: width * 0.85,
+                //       child: Text(
+                //         "Booking By".tr,
+                //         style: TextStyle(
+                //             fontFamily: "primary",
+                //             color: Colors.grey,
+                //             fontSize: width * 0.035,
+                //             fontWeight: FontWeight.w600),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: [
                     SizedBox(
                       width: width * 0.85,
                       child: Text(
-                        "SaloonName".tr,
-                        style: TextStyle(
-                            fontFamily: "primary",
-                            color: Colors.grey,
-                            fontSize: width * 0.035,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: width * 0.85,
-                      child: Text(
-                        Get.locale.toString() == "en"
-                            ? item.saloon.nameEn ?? ""
-                            : item.saloon.nameAr ?? "",
+                        item.byAdmin == 1 ? "Self Appointment" : "Customer ",
                         style: TextStyle(
                             fontFamily: "primary",
                             color: Colors.black,
@@ -132,8 +135,9 @@ class AppointmentItem extends StatelessWidget {
                     textColor2: Colors.grey),
                 textRow(
                     title1: item.requestedServices.length.toString(),
-                    title2:
-                        "${item.totalAmount.toStringAsFixed(3)} ${"OMR".tr}",
+                    isTotalAmount: true,
+                    title2: item.priceAfterDiscount.toStringAsFixed(3),
+                    title3: item.totalAmount.toStringAsFixed(3),
                     textColor1: Colors.black,
                     textColor2: primaryColor),
                 const SizedBox(
@@ -172,9 +176,40 @@ class AppointmentItem extends StatelessWidget {
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
+                          Text(
+                            "1 x  ",
+                            textDirection: Get.locale.toString() == "en"
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
+                            style: TextStyle(
+                                fontFamily: "primary",
+                                color: Colors.grey,
+                                fontSize: width * 0.035,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          if ((double.tryParse(item.requestedServices[i].price
+                                      .toString()) ??
+                                  0) >
+                              (double.tryParse(item
+                                      .requestedServices[i].priceAfterDiscount
+                                      .toString()) ??
+                                  0))
+                            Text(
+                              "${item.requestedServices[i].price.toString()} OMR",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.lineThrough,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "primary",
+                              ),
+                            ),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(
-                              "1 x ${item.requestedServices[i].providerService!.charges.toString()}  ",
+                              " ${item.requestedServices[i].providerService!.chargesAfterDiscount.toString()}  OMR",
                               textDirection: Get.locale.toString() == "en"
                                   ? TextDirection.ltr
                                   : TextDirection.rtl,
@@ -272,6 +307,8 @@ class AppointmentItem extends StatelessWidget {
   Row textRow(
       {required String title1,
       required String title2,
+      String title3 = "",
+      bool isTotalAmount = false,
       required Color textColor1,
       required Color textColor2}) {
     return Row(
@@ -287,6 +324,21 @@ class AppointmentItem extends StatelessWidget {
                 fontSize: width * 0.035,
                 fontWeight: FontWeight.w600),
           ),
+        ),
+        if (isTotalAmount)
+          if ((double.tryParse(title2) ?? 0) < (double.tryParse(title3) ?? 0))
+            Text(
+              "$title3 OMR",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
+                decoration: TextDecoration.lineThrough,
+                fontWeight: FontWeight.w600,
+                fontFamily: "primary",
+              ),
+            ),
+        const SizedBox(
+          width: 10,
         ),
         Expanded(
           child: Text(

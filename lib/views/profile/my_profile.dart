@@ -182,6 +182,7 @@ class _Profile extends State<Profile> {
                                 controller.updateProfile(
                                     nameEn: nameEn,
                                     nameAr: nameAr,
+                                    password: "",
                                     email: email,
                                     contact: contact,
                                     image: image1);

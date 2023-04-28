@@ -1,13 +1,16 @@
-import 'package:bq_admin/config/storages.dart';
 import 'package:bq_admin/config/sub_urls.dart';
 import 'package:bq_admin/http/http.dart';
-import 'package:bq_admin/main.dart';
 import 'package:bq_admin/models/response/appoinment_list.dart';
 import 'package:bq_admin/models/simple/appointment.dart';
 import 'package:get/get.dart';
 
 class AppoinmentController extends GetxController {
   RxBool loading = false.obs;
+  RxBool forceLoading = false.obs;
+
+  RxString to = "".obs;
+  RxString from = "".obs;
+
   RxList<Appointment> appoinments = <Appointment>[].obs;
   RxInt currentUpdatingIndex = 0.obs;
   @override
@@ -18,10 +21,9 @@ class AppoinmentController extends GetxController {
 
   fetchAppoinments() async {
     try {
-      var userid = MyApp().storage.read(userIDPath);
-      // ToastMessages.showSuccess(userid);
       loading(true);
-      final result = await post(appointmentListUrl, {});
+      final result =
+          await post(appointmentListUrl, {"from": from.value, "to": to.value});
 
       if (result != null) {
         final products = appointmentsFromJson(result?.body);
@@ -29,8 +31,26 @@ class AppoinmentController extends GetxController {
         return products.data;
       }
     } finally {
+      forceLoading(false);
+
       loading(false);
     }
+  }
+
+  Future<List<Appointment>> fetchEmployeeAppoinments(String empID,
+      {String to = "", String from = ""}) async {
+    try {
+      final result = await post(
+          appointmentListUrl, {"from": from, "to": to, "emp_id": empID});
+
+      if (result != null) {
+        final jsonResponse = appointmentsFromJson(result?.body);
+        jsonResponse.data.reversed.toList();
+        return jsonResponse.data.reversed.toList();
+      } else {
+        return [];
+      }
+    } finally {}
   }
 
   Future<bool> changeAppointmentStatus(
@@ -54,6 +74,7 @@ class AppoinmentController extends GetxController {
       }
     } finally {
       currentUpdatingIndex(0);
+      forceLoading(false);
       loading(false);
     }
   }

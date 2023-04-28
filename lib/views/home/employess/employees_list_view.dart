@@ -7,6 +7,7 @@ import 'package:bq_admin/views/home/employess/add_employee.dart';
 import 'package:bq_admin/views/home/employess/employee_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class EmployeesListView extends StatefulWidget {
   const EmployeesListView({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _EmployeesListView extends State<EmployeesListView> {
   EmployeeController employeesController = Get.find<EmployeeController>();
   @override
   void initState() {
+    employeesController.fetchEmployees();
     super.initState();
   }
 
@@ -36,6 +38,9 @@ class _EmployeesListView extends State<EmployeesListView> {
     return length;
   }
 
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +48,9 @@ class _EmployeesListView extends State<EmployeesListView> {
           title: "Employees",
           rightIcon: GestureDetector(
             onTap: () {
-              Get.to(const AddEmployee());
+              Get.to(AddEmployee(
+                employee: Employee(),
+              ));
             },
             child: const IconButton(
               icon: Icon(
@@ -59,22 +66,33 @@ class _EmployeesListView extends State<EmployeesListView> {
               ? const Center(child: BQLoaing())
               : getListLength(controller) == 0 && !controller.loading.value
                   ? const NoDataWidget(text: "No Employee Available")
-                  : ListView.builder(
-                      itemCount: getListLength(controller),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 2.0, left: 5, right: 5),
-                            child: SizedBox(
-                              child: saloonItem(
-                                100,
-                                context,
-                                item: getListIndex(controller, index),
-                                controller: controller,
-                                onPress: (item) {},
-                              ),
-                            ));
-                      }),
+                  : SmartRefresher(
+                      controller: refreshController,
+                      enablePullDown: true,
+                      enablePullUp: false,
+                      onRefresh: () async {
+                        await controller.fetchEmployees();
+
+                        refreshController.refreshCompleted();
+                      },
+                      header: const WaterDropHeader(),
+                      child: ListView.builder(
+                          itemCount: getListLength(controller),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, left: 5, right: 5),
+                                child: SizedBox(
+                                  child: saloonItem(
+                                    100,
+                                    context,
+                                    item: getListIndex(controller, index),
+                                    controller: controller,
+                                    onPress: (item) {},
+                                  ),
+                                ));
+                          }),
+                    ),
         );
       })),
     );

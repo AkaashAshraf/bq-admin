@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/storages.dart';
@@ -9,6 +7,7 @@ import 'package:bq_admin/main.dart';
 import 'package:bq_admin/models/response/login.dart';
 import 'package:bq_admin/models/user.dart';
 import 'package:bq_admin/views/auth/log_in.dart';
+import 'package:bq_admin/views/auth/update_password.dart';
 import 'package:bq_admin/views/home/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,8 +25,10 @@ class AuthController extends GetxController {
   Rx<User> userInfo = User().obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     try {
+      await updateProfile(
+          nameEn: "", nameAr: "", password: "", email: "", contact: "");
       getUserInfoFromCache();
     } catch (e) {
       print(e.toString());
@@ -53,12 +54,20 @@ class AuthController extends GetxController {
     if (rawData == "" || rawData == null) return;
     final loginResponse = loginFromJson(rawData);
     userInfo.value = loginResponse.data!.user!;
+    if (userInfo.value.passwordUpdatedAt!.isEmpty) {
+      Get.to(const UpdatePassword(forceUpdate: true));
+    }
   }
 
   updateProfile({
     required String nameEn,
     required String nameAr,
+    required String password,
     required String email,
+    String time1 = "",
+    String time2 = "",
+    String time3 = "",
+    String time4 = "",
     required String contact,
     XFile? image,
   }) async {
@@ -69,8 +78,14 @@ class AuthController extends GetxController {
           http.MultipartRequest('POST', Uri.parse(baseUrl + updateProfileUrl));
       if (nameEn.isNotEmpty) request.fields['name_en'] = nameEn;
       if (nameAr.isNotEmpty) request.fields['name_ar'] = nameAr;
+      if (time1.isNotEmpty) request.fields['time1'] = time1;
+      if (time2.isNotEmpty) request.fields['time2'] = time2;
+      if (time3.isNotEmpty) request.fields['time3'] = time3;
+      if (time4.isNotEmpty) request.fields['time4'] = time4;
+
       if (contact.isNotEmpty) request.fields['contact'] = contact;
       if (email.isNotEmpty) request.fields['email'] = email;
+      if (password.isNotEmpty) request.fields['password'] = password;
 
       if (image != null) {
         http.MultipartFile multipartFile =
@@ -87,6 +102,9 @@ class AuthController extends GetxController {
         MyApp().storage.write(userNamePath, jsonData.data!.user!.name);
         MyApp().storage.write(userDataPath, loginToJson(jsonData));
         userInfo(jsonData.data?.user);
+        if (jsonData.data!.user!.passwordUpdatedAt!.isEmpty) {
+          Get.to(const UpdatePassword(forceUpdate: true));
+        }
         Get.back();
       }
       return res;

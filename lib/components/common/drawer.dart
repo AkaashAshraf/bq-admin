@@ -2,8 +2,10 @@ import 'package:bq_admin/components/common/text_alert.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/text_sizes.dart';
 import 'package:bq_admin/controllers/auth_controller.dart';
+import 'package:bq_admin/views/auth/update_password.dart';
 import 'package:bq_admin/views/notifications/notifications.dart';
 import 'package:bq_admin/views/profile/my_profile.dart';
+import 'package:bq_admin/views/profile/timmings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -71,8 +73,24 @@ class MenuDrawer extends StatelessWidget {
               size: 25,
               color: textInputIconColor,
             ), onPress: () {
+          Get.to(const Timmings());
+        }, title: "Adjust Timming".tr),
+        drawerItem(context,
+            icon: const Icon(
+              Icons.notifications,
+              size: 25,
+              color: textInputIconColor,
+            ), onPress: () {
           Get.to(const NotificationsList());
         }, title: "Notifications".tr),
+        drawerItem(context,
+            icon: const Icon(
+              Icons.notifications,
+              size: 25,
+              color: textInputIconColor,
+            ), onPress: () {
+          Get.to(const UpdatePassword(forceUpdate: false));
+        }, title: "Update Password".tr),
         if (false)
           ListTile(
             leading: const Icon(

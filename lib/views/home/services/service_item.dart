@@ -1,9 +1,13 @@
+import 'package:bq_admin/components/common/buttons.dart';
+import 'package:bq_admin/components/common/generic_popup.dart';
 import 'package:bq_admin/components/common/loading_indicator%20copy.dart';
 import 'package:bq_admin/components/common/simple_button.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/text_sizes.dart';
+import 'package:bq_admin/controllers/cart_controller.dart';
 import 'package:bq_admin/controllers/service_controller.dart';
+import 'package:bq_admin/models/simple/cart.dart';
 import 'package:bq_admin/models/simple/service.dart';
 import 'package:bq_admin/views/home/services/update_service.dart';
 import 'package:flutter/material.dart';
@@ -37,21 +41,48 @@ Widget serviceItem(double cardHeight, BuildContext context,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      width: screenWidth(context) * 0.65,
-                      child: Text(
-                        Get.locale.toString() == "en"
-                            ? item.generalService.nameEn
-                            : item.generalService.nameAr,
-                        textAlign: Get.locale.toString() == "en"
-                            ? TextAlign.left
-                            : TextAlign.right,
-                        style: TextStyle(
-                            fontFamily: "primary",
-                            color: titleColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: getTextSize(context).smallItemMainText),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: screenWidth(context) * 0.55,
+                          child: Text(
+                            Get.locale.toString() == "en"
+                                ? item.generalService.nameEn
+                                : item.generalService.nameAr,
+                            textAlign: Get.locale.toString() == "en"
+                                ? TextAlign.left
+                                : TextAlign.right,
+                            style: TextStyle(
+                                fontFamily: "primary",
+                                color: titleColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                    getTextSize(context).smallItemMainText),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.find<CartController>().addToCart(
+                              CartItem(
+                                  imagePath: item.image,
+                                  productID: item.id,
+                                  providerID: item.companyId,
+                                  nameEn: item.generalService.nameEn,
+                                  time: int.tryParse(item.time) ?? 0,
+                                  nameAr: item.generalService.nameAr,
+                                  unitPrice: double.tryParse(
+                                          item.chargesAfterDiscount) ??
+                                      0),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.shopping_cart,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 5,
@@ -68,12 +99,31 @@ Widget serviceItem(double cardHeight, BuildContext context,
                               fontFamily: "primary",
                             ),
                           ),
-                          Text(
-                            "${item.charges} OMR",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontFamily: "primary",
-                            ),
+                          Row(
+                            children: [
+                              if ((double.tryParse(item.charges) ?? 0) >
+                                  (double.tryParse(item.chargesAfterDiscount) ??
+                                      0))
+                                Text(
+                                  "${item.charges} OMR",
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic,
+                                    decoration: TextDecoration.lineThrough,
+                                    fontFamily: "primary",
+                                  ),
+                                ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "${item.chargesAfterDiscount} OMR",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "primary",
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -176,6 +226,45 @@ Widget serviceItem(double cardHeight, BuildContext context,
                   ],
                 ),
               ),
+              if (false)
+                Positioned(
+                  bottom: 5,
+                  right: Get.locale.toString() == "en"
+                      ? 10
+                      : screenWidth(context) * 0.85,
+                  child: GetX<CartController>(builder: (cartController) {
+                    return GestureDetector(
+                      onTap: () async {
+                        // cartController.addToCart(
+                        //     CartItem(
+                        //         imagePath: service.image ?? "",
+                        //         productID: service.id ?? 0,
+                        //         providerID: service.companyId ?? 0,
+                        //         nameEn: service.generalService?.nameEn ?? "",
+                        //         time: service.time ?? 0,
+                        //         nameAr: service.generalService?.nameAr ?? "",
+                        //         unitPrice: double.tryParse(service.charges!) ?? 0),
+                        //     saloon);
+
+                        // var contain = Get.put(SaloonsController())
+                        //     .services
+                        //     .where((element) =>
+                        //         element.serviceAssigneeId ==
+                        //         service.serviceAssigneeId)
+                        //     .first
+                        //     .isAddedToCart = isAdded;
+
+                        // Get.put(
+                        //     SaloonsController().services.first.isAddedToCart);
+                      },
+                      child: const Icon(
+                        Icons.shopping_cart,
+                        size: 22,
+                        color: primaryColor,
+                      ),
+                    );
+                  }),
+                ),
             ],
           ),
         ),

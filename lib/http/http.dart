@@ -5,18 +5,24 @@ import 'package:bq_admin/config/storages.dart';
 import 'package:bq_admin/main.dart';
 import 'package:http/http.dart' as http;
 
-Future<dynamic> post(String url, dynamic body) async {
+Future<dynamic> post(String url, dynamic body,
+    {bool selfAppoinment = false}) async {
   try {
     var token = await MyApp().storage.read(tokenPath) ?? "";
     var userID = await MyApp().storage.read(userIDPath) ?? "";
+    String paramName = "user_id";
+    if (selfAppoinment) {
+      paramName = "saloon_id";
+    }
     var response = await http.post(Uri.parse(baseUrl + url), body: {
       ...body,
-      "user_id": userID.toString(), // userID.toString(),
+      paramName: userID.toString(), // userID.toString(),
       "token": token
     }, headers: {
       "Accept": "application/json",
       // "Authorization": "Bearer $token"
     });
+    inspect(response);
     // inspect({
     //   ...body,
     //   "user_id": userID.toString(), // userID.toString(),

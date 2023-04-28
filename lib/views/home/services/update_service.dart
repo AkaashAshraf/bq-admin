@@ -6,7 +6,6 @@ import 'package:bq_admin/components/common/image_picker.dart';
 import 'package:bq_admin/components/common/loading_indicator%20copy.dart';
 import 'package:bq_admin/components/common/simple_button.dart';
 import 'package:bq_admin/components/common/simple_text_input.dart';
-import 'package:bq_admin/components/common/single_selection_drop_down.dart';
 import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/controllers/constant_controller.dart';
@@ -37,6 +36,8 @@ class _UpdateServiceState extends State<UpdateService> {
   String imagePath = "";
 
   String price = "";
+  String disountedPrice = "";
+
   String time = "";
   int service = 0;
 
@@ -45,6 +46,7 @@ class _UpdateServiceState extends State<UpdateService> {
 
   bool checkValidation() {
     if (price.isEmpty ||
+        disountedPrice.isEmpty ||
         time.isEmpty ||
         descriptionEn.isEmpty ||
         descriptionAr.isEmpty) {
@@ -65,7 +67,7 @@ class _UpdateServiceState extends State<UpdateService> {
     setState(() {
       id = widget.service.id;
       imagePath = imageBaseUrl + widget.service.image;
-
+      disountedPrice = widget.service.chargesAfterDiscount ?? "";
       price = widget.service.charges;
       descriptionEn = widget.service.descriptionEn;
       descriptionAr = widget.service.descriptionAr;
@@ -128,20 +130,37 @@ class _UpdateServiceState extends State<UpdateService> {
                   Expanded(
                     child: SimpleInputField(
                       keyBoardType: TextInputType.number,
-                      title: "Estimated Time",
+                      title: "Discounted Price",
                       hint: "writeHere".tr,
-                      initialValue: time,
-                      validator:
-                          isValidate && time.isEmpty ? "required".tr : "",
+                      initialValue: disountedPrice,
+                      validator: isValidate && disountedPrice.isEmpty
+                          ? "required".tr
+                          : "",
                       onTextChange: (val) {
                         setState(() {
-                          time = val;
+                          disountedPrice = val;
                         });
                       },
                     ),
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              SimpleInputField(
+                keyBoardType: TextInputType.number,
+                title: "Estimated Time",
+                hint: "writeHere".tr,
+                initialValue: time,
+                validator: isValidate && time.isEmpty ? "required".tr : "",
+                onTextChange: (val) {
+                  setState(() {
+                    time = val;
+                  });
+                },
+              ),
+
               const SizedBox(
                 height: 10,
               ),
@@ -236,6 +255,7 @@ class _UpdateServiceState extends State<UpdateService> {
                       var res = await controller.updateService(
                           service: service,
                           id: id,
+                          disountedPrice: disountedPrice,
                           descriptionEn: descriptionEn,
                           price: price,
                           descriptionAr: descriptionAr,
@@ -243,10 +263,10 @@ class _UpdateServiceState extends State<UpdateService> {
                           image: image1);
                       if (res != null) {
                         var response = generalResponseFromJson(res);
-                        // inspect(response);
+                        inspect(response);
                         if (response.status == 1) {
                           ToastMessages.showSuccess(
-                              "Employee has been updated successfully");
+                              "Service has been updated successfully");
                           Get.back();
                           controller.fetchServices();
                         } else {

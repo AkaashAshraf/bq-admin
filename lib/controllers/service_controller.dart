@@ -67,6 +67,7 @@ class ServiceController extends GetxController {
     required int service,
     required String descriptionEn,
     required String price,
+    required String disountedPrice,
     required String descriptionAr,
     required String time,
     required XFile? image,
@@ -79,6 +80,8 @@ class ServiceController extends GetxController {
 
       request.fields['service'] = service.toString();
       request.fields['charges'] = price;
+      request.fields['disounted_price'] = disountedPrice;
+
       request.fields['time'] = time;
 
       request.fields['description_en'] = descriptionEn;
@@ -102,6 +105,7 @@ class ServiceController extends GetxController {
     required int id,
     required String descriptionEn,
     required String price,
+    required String disountedPrice,
     required String descriptionAr,
     required String time,
     required XFile? image,
@@ -116,6 +120,8 @@ class ServiceController extends GetxController {
       request.fields['id'] = id.toString();
 
       request.fields['charges'] = price;
+      request.fields['disounted_price'] = disountedPrice;
+
       request.fields['time'] = time;
 
       request.fields['description_en'] = descriptionEn;

@@ -6,8 +6,8 @@ class Service {
     this.companyId = 0,
     this.serviceId = 0,
     this.charges = "",
-    this.discount = 0,
-    this.time = 0,
+    this.discount = '',
+    this.time = '',
     this.chargesAfterDiscount = "",
     this.isBlocked = 0,
     this.isActive = 0,
@@ -26,9 +26,9 @@ class Service {
   int companyId;
   int serviceId;
   String charges;
-  int discount;
-  int time;
-  dynamic chargesAfterDiscount;
+  String discount;
+  String time;
+  String chargesAfterDiscount;
   int isBlocked;
   int isActive;
   String discountTime;
@@ -45,10 +45,10 @@ class Service {
         id: json["id"] ?? 0,
         companyId: json["company_id"] ?? 0,
         serviceId: json["service_id"] ?? 0,
-        charges: json["charges"] ?? "",
-        discount: json["discount"] ?? 0,
-        time: json["time"] ?? 0,
-        chargesAfterDiscount: json["charges_after_discount"] ?? "",
+        charges: json["charges"].toString(),
+        discount: json["discount"].toString(),
+        time: json["time"].toString(),
+        chargesAfterDiscount: json["charges_after_discount"].toString(),
         isBlocked: json["isBlocked"] ?? 0,
         isActive: json["isActive"] ?? 0,
         discountTime: json["discount_time"] ?? "",

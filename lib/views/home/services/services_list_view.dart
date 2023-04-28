@@ -8,6 +8,7 @@ import 'package:bq_admin/views/home/services/add_service.dart';
 import 'package:bq_admin/views/home/services/service_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ServiceListView extends StatefulWidget {
   const ServiceListView({Key? key}) : super(key: key);
@@ -38,10 +39,14 @@ class _ServiceListView extends State<ServiceListView> {
     return length;
   }
 
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(
+          showCart: true,
           title: "Services",
           rightIcon: GestureDetector(
             onTap: () {
@@ -61,21 +66,32 @@ class _ServiceListView extends State<ServiceListView> {
               ? const Center(child: BQLoaing())
               : getListLength(controller) == 0 && !controller.loading.value
                   ? const NoDataWidget(text: "No Service Available")
-                  : ListView.builder(
-                      itemCount: getListLength(controller),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 2.0, left: 5, right: 5),
-                            child: SizedBox(
-                              child: serviceItem(
-                                100,
-                                context,
-                                item: getListIndex(controller, index),
-                                onPress: (item) {},
-                              ),
-                            ));
-                      }),
+                  : SmartRefresher(
+                      controller: refreshController,
+                      enablePullDown: true,
+                      enablePullUp: false,
+                      onRefresh: () async {
+                        await controller.fetchServices();
+
+                        refreshController.refreshCompleted();
+                      },
+                      header: const WaterDropHeader(),
+                      child: ListView.builder(
+                          itemCount: getListLength(controller),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, left: 5, right: 5),
+                                child: SizedBox(
+                                  child: serviceItem(
+                                    100,
+                                    context,
+                                    item: getListIndex(controller, index),
+                                    onPress: (item) {},
+                                  ),
+                                ));
+                          }),
+                    ),
         );
       })),
     );

@@ -1,6 +1,7 @@
 import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/config/colors.dart';
 import 'package:bq_admin/config/text_sizes.dart';
+import 'package:bq_admin/models/simple/employee.dart';
 import 'package:bq_admin/views/home/employess/add_employee.dart';
 import 'package:bq_admin/views/home/employess/employees_list_view.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -22,7 +23,9 @@ class _EmployeeTabs extends State<EmployeeTabs> {
             title: "Employees",
             rightIcon: GestureDetector(
               onTap: () {
-                Get.to(const AddEmployee());
+                Get.to(AddEmployee(
+                  employee: Employee(),
+                ));
               },
               child: const IconButton(
                 icon: Icon(
