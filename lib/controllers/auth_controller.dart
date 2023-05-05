@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/constants.dart';
 import 'package:bq_admin/config/storages.dart';
@@ -83,6 +85,7 @@ class AuthController extends GetxController {
       if (time3.isNotEmpty) request.fields['time3'] = time3;
       if (time4.isNotEmpty) request.fields['time4'] = time4;
 
+      inspect(request);
       if (contact.isNotEmpty) request.fields['contact'] = contact;
       if (email.isNotEmpty) request.fields['email'] = email;
       if (password.isNotEmpty) request.fields['password'] = password;
