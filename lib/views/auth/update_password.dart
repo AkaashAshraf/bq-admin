@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/components/common/buttons.dart';
 import 'package:bq_admin/components/common/loading_indicator%20copy.dart';
+import 'package:bq_admin/components/common/textInputs/password_input.dart';
 import 'package:bq_admin/components/common/textInputs/text_input.dart';
 import 'package:bq_admin/components/common/toasts.dart';
 import 'package:bq_admin/config/colors.dart';
@@ -56,37 +57,37 @@ class _UpdatePassword extends State<UpdatePassword> {
                         const SizedBox(
                           height: 30,
                         ),
-                        textInputCustom(
-                            label: "Password",
-                            initialValue: password,
-                            obscureText: true,
-                            preIcon: const Icon(
-                              Icons.password,
-                              size: 20,
-                              color: textInputIconColor,
-                            ),
+                        PasswordInput(
                             onTextChange: (val) {
                               setState(() {
                                 password = val;
                               });
-                            }),
+                            },
+                            lable: "Password"),
                         const SizedBox(
                           height: 30,
                         ),
-                        textInputCustom(
-                            label: "Confirm Password",
-                            initialValue: confirmPassword,
-                            obscureText: true,
-                            preIcon: const Icon(
-                              Icons.password,
-                              size: 20,
-                              color: textInputIconColor,
-                            ),
+                        PasswordInput(
                             onTextChange: (val) {
                               setState(() {
                                 confirmPassword = val;
                               });
-                            }),
+                            },
+                            lable: "Confirm Password"),
+                        // textInputCustom(
+                        //     label: "Confirm Password",
+                        //     initialValue: confirmPassword,
+                        //     obscureText: true,
+                        //     preIcon: const Icon(
+                        //       Icons.password,
+                        //       size: 20,
+                        //       color: textInputIconColor,
+                        //     ),
+                        //     onTextChange: (val) {
+                        //       setState(() {
+                        //         confirmPassword = val;
+                        //       });
+                        //     }),
                         const SizedBox(
                           height: 10,
                         ),

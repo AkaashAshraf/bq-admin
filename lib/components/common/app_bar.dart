@@ -46,7 +46,7 @@ AppBar appBar(
                       children: <Widget>[
                         const IconButton(
                           icon: Icon(
-                            Icons.shopping_cart,
+                            Icons.calendar_month,
                             color: Colors.white,
                           ),
                           onPressed: null,

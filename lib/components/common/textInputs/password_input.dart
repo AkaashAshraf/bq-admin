@@ -27,7 +27,7 @@ class _PasswordInputState extends State<PasswordInput> {
         preIcon: const Icon(
           Icons.lock,
           size: 20,
-          color: textInputIconColor,
+          color: primaryColor,
         ),
         postIcon: GestureDetector(
           onTap: () => {
