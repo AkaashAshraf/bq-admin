@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bq_admin/config/sub_urls.dart';
 import 'package:bq_admin/http/http.dart';
 import 'package:bq_admin/models/response/appoinment_list.dart';
@@ -24,7 +26,7 @@ class AppoinmentController extends GetxController {
       loading(true);
       final result =
           await post(appointmentListUrl, {"from": from.value, "to": to.value});
-
+      // inspect({"from": from.value, "to": to.value});
       if (result != null) {
         final products = appointmentsFromJson(result?.body);
         appoinments.value = products.data.reversed.toList();
@@ -40,6 +42,7 @@ class AppoinmentController extends GetxController {
   Future<List<Appointment>> fetchEmployeeAppoinments(String empID,
       {String to = "", String from = ""}) async {
     try {
+      forceLoading(true);
       final result = await post(
           appointmentListUrl, {"from": from, "to": to, "emp_id": empID});
 
@@ -50,7 +53,9 @@ class AppoinmentController extends GetxController {
       } else {
         return [];
       }
-    } finally {}
+    } finally {
+      forceLoading(false);
+    }
   }
 
   Future<bool> changeAppointmentStatus(
