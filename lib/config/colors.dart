@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xff5D3FD3);
+MaterialColor mainAppColor = const MaterialColor(
+  0xffff1493,
+  <int, Color>{
+    50: primaryColor,
+    100: primaryColor,
+    200: primaryColor,
+    300: primaryColor,
+    400: primaryColor,
+    500: primaryColor,
+    600: primaryColor,
+    700: primaryColor,
+    800: primaryColor,
+    900: primaryColor,
+  },
+);
 
 const textInputIconColor = Color(0xffff1493);
 const authTextInputHintColor = Color(0xFFbebebe);
