@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:bq_admin/components/common/app_bar.dart';
 import 'package:bq_admin/components/common/buttons.dart';
